@@ -20,9 +20,18 @@ fun main() {
         println("Sistem: Perangkat '${it.name}' berhasil ditambahkan ke list.")
     }
 
+    SmartDevice("Ezviz Outdoor", "Camera").apply {
+        isOnline = true
+        powerLoad = 5
+    }.also {
+        println("(LOG) Kamera terhubung")
+        homeDevices.add(it)
+    }
+
     // Mari kita cek isinya menggunakan fungsi diagnose() yang sudah dibuat sebelumnya
     println("\n--- Status Perangkat Saat Ini ---")
     homeDevices.forEach {
         println(it.diagnose())
     }
+
 }
