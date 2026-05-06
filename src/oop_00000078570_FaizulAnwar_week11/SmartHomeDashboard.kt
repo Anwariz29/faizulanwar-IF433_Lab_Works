@@ -28,6 +28,16 @@ fun main() {
         homeDevices.add(it)
     }
 
+    val acInverter = run {
+        val device = SmartDevice("Daikin Inverter (Kabel 3x2.5)", "HVAC", false, 800)
+        // Objek ini dikembalikan (return) untuk ditangkap oleh variabel acInverter
+        device
+    }
+    homeDevices.add(acInverter)
+
+    // 4. Konfigurasi Alat Pakan Peliharaan
+    homeDevices.add(SmartDevice("Picolo's Auto Feeder", "Pet Care", true, 10))
+
     // Mari kita cek isinya menggunakan fungsi diagnose() yang sudah dibuat sebelumnya
     println("\n--- Status Perangkat Saat Ini ---")
     homeDevices.forEach {
