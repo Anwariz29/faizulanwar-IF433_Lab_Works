@@ -1,25 +1,20 @@
 package oop_00000078570_FaizulAnwar_week11
 
 fun main() {
-    // Inisialisasi penampung perangkat menggunakan MutableList
+    // 1. Inisialisasi Penampung
     val homeDevices = mutableListOf<SmartDevice>()
 
-    println("Sistem Smart Home telah diinisialisasi.")
-    println("Jumlah perangkat saat ini: ${homeDevices.size}")
-
-    val smartLamp = SmartDevice("", "").apply {
-        // apply digunakan untuk mengatur properti di dalam lingkup objek tersebut
+    // 2. Konfigurasi Pencahayaan (apply & also)
+    SmartDevice("", "").apply {
         name = "Philips WiZ Living Room"
         category = "Lighting"
         isOnline = true
         powerLoad = 12
     }.also {
-        // also digunakan untuk melakukan aksi tambahan (menambahkan ke list)
-        // setelah konfigurasi selesai
         homeDevices.add(it)
-        println("Sistem: Perangkat '${it.name}' berhasil ditambahkan ke list.")
     }
 
+    // 3. Konfigurasi Keamanan (also & chaining)
     SmartDevice("Ezviz Outdoor", "Camera").apply {
         isOnline = true
         powerLoad = 5
@@ -28,51 +23,37 @@ fun main() {
         homeDevices.add(it)
     }
 
+    // 4. Konfigurasi AC & Kabel (run)
     val acInverter = run {
         val device = SmartDevice("Daikin Inverter (Kabel 3x2.5)", "HVAC", false, 800)
-        // Objek ini dikembalikan (return) untuk ditangkap oleh variabel acInverter
         device
     }
     homeDevices.add(acInverter)
 
-    // 4. Konfigurasi Alat Pakan Peliharaan
+    // 5. Tambah Alat Pakan Peliharaan
     homeDevices.add(SmartDevice("Picolo's Auto Feeder", "Pet Care", true, 10))
 
-    println("\n--- Hasil Pencarian Aman ---")
-
-    // 1. Mencari perangkat dengan kategori "Camera"
+    // 6. Pencarian Aman (let)
     val searchResult = homeDevices.find { it.category == "Camera" }
-
-    // 2. Menggunakan ?.let untuk menangani hasil pencarian secara aman
+    println("\n--- Hasil Pencarian ---")
     searchResult?.let {
-        // Blok ini hanya akan dijalankan jika searchResult TIDAK null
-        println("Hasil ditemukan:")
         println(it.diagnose())
-    } ?: println("Pencarian Selesai: Perangkat tidak ditemukan.")
+    }
 
-    println("\n--- Rangkuman Sistem ---")
+    // 7. Eksekusi Dashboard (forEach & Extension Function)
+    println("\n--- Daftar Seluruh Perangkat (Dashboard) ---")
+    homeDevices.forEach { device ->
+        println(device.diagnose())
+    }
 
-    // Menggunakan with untuk mengakses properti list secara langsung
+    // 8. Kalkulasi Daya (run)
+    val totalPower = homeDevices.run { sumOf { it.powerLoad } }
+
+    // 9. Format Summary (with)
     with(homeDevices) {
-        // Di dalam blok ini, 'this' merujuk pada homeDevices
-        println("Total perangkat yang terdaftar: ${this.size} unit")
-
-        // Bonus: Menghitung total beban daya dari semua perangkat
-        val totalPower = sumOf { it.powerLoad }
-        println("Total konsumsi daya sistem: $totalPower Watt")
-
-        println("Status sistem: Terkonfigurasi sepenuhnya.")
+        println("\n--- Rangkuman Sistem ---")
+        println("Total perangkat : ${this.size} unit")
+        println("Total beban daya: $totalPower Watt")
+        println("Status Dashboard: Berjalan Normal")
     }
-
-    // Mari kita cek isinya menggunakan fungsi diagnose() yang sudah dibuat sebelumnya
-    println("\n--- Status Perangkat Saat Ini ---")
-    homeDevices.forEach {
-        println(it.diagnose())
-    }
-
-    val totalPower = homeDevices.run {
-        sumOf { it.powerLoad }
-    }
-
-    println("Total daya keseluruhan perangkat: $totalPower Watt")
 }
