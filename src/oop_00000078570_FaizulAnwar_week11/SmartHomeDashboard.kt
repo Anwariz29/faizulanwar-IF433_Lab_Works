@@ -50,6 +50,20 @@ fun main() {
         println(it.diagnose())
     } ?: println("Pencarian Selesai: Perangkat tidak ditemukan.")
 
+    println("\n--- Rangkuman Sistem ---")
+
+    // Menggunakan with untuk mengakses properti list secara langsung
+    with(homeDevices) {
+        // Di dalam blok ini, 'this' merujuk pada homeDevices
+        println("Total perangkat yang terdaftar: ${this.size} unit")
+
+        // Bonus: Menghitung total beban daya dari semua perangkat
+        val totalPower = sumOf { it.powerLoad }
+        println("Total konsumsi daya sistem: $totalPower Watt")
+
+        println("Status sistem: Terkonfigurasi sepenuhnya.")
+    }
+
     // Mari kita cek isinya menggunakan fungsi diagnose() yang sudah dibuat sebelumnya
     println("\n--- Status Perangkat Saat Ini ---")
     homeDevices.forEach {
