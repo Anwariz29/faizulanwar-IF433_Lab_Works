@@ -24,4 +24,10 @@ fun main() {
         val s1 = Student(name, nim, major)
         println("Status: Pendaftaran Selesai.")
     }
+
+    //Secondary Constructor
+    // wajib memanggil primary constructor menggunakan 'this()'
+    //constructor(name: String, nim: String) : this(name, nim, major = "Non-Matriculated") {
+    //    println("LOG: Menggunakan constructor jalur umum (Tanpa Jurusan).")
+    //}
 }
