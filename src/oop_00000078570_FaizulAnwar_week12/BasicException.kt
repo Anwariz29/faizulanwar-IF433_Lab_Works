@@ -10,3 +10,16 @@ fun divide(a: Int, b: Int): Int {
         println("Division attempt finished")
     }
 }
+
+fun main() {
+    println("=== TEST TRY AS EXPRESSION ===")
+    val inputString = "123A"
+
+    val result: Int = try {
+        Integer.parseInt(inputString)
+    } catch (e: NumberFormatException){
+        -1
+    }
+
+    println("Hasil parsing: $result")
+}
