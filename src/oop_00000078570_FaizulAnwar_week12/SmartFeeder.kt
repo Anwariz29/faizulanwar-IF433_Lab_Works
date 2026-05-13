@@ -16,9 +16,12 @@ fun dispenseKibble(
         throw DispenserJamException()
     }
 
-    // cek stok cukup atau tidak
+    // validasi stok makanan
     if (requestedGram > availableGram) {
-        throw FoodEmptyException(requestedGram, availableGram)
+        throw FoodEmptyException(
+            requestedGram,
+            availableGram
+        )
     }
 
     // hitung sisa stok
