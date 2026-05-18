@@ -68,13 +68,46 @@ fun loadTrades(path: String): List<TradeRecord> {
 
 // Contoh fungsi main untuk mensimulasikan penggunaan model data
 fun main() {
-    println("=== Inisialisasi Log Transaksi Kripto ===")
+    val filePath = "crypto_trades.csv"
 
-    // Membuat contoh objek TradeRecord
-    val trade1 = TradeRecord(1, "BTCUSDT", "LONG", 150.0, 45.25)
-    val trade2 = TradeRecord(2, "ETHUSDT", "SHORT", 200.0, -12.50)
+    println("=== [1] MOCK DATA SETUP ===")
+    // Mendefinisikan riwayat trade simulasi sesuai instruksi
+    val mockTrades = listOf(
+        TradeRecord(1, "BTCUSDT", "LONG", 250.0, 45.80),
+        TradeRecord(2, "ETHUSDT", "SHORT", 150.0, -12.50),
+        TradeRecord(3, "SOLUSDT", "LONG", 100.0, 28.20)
+    )
+    mockTrades.forEach { println("Simulasi Trade -> $it") }
+    println("--------------------------------------------------")
 
-    // Menampilkan data ke konsol
-    println(trade1)
-    println(trade2)
+    println("=== [2] EXECUTING SAVE SYSTEM ===")
+    // Menyimpan data ke "crypto_trades.csv"
+    saveTrades(mockTrades, filePath)
+    println("--------------------------------------------------")
+
+    // --- Simulasi Kontaminasi Data (Opsional untuk pembuktian Robustness) ---
+    // Kita sengaja menyuntikkan data rusak ke dalam file di luar sistem aplikasi
+    println("=== [3] INJECTING CORRUPTED DATA (SIMULATION) ===")
+    File(filePath).appendText("\n4,BNBUSDT,LONG,CACAT_ANGGA,5.5\n")
+    File(filePath).appendText("5,DOTUSDT,SHORT\n") // Kurang kolom
+    File(filePath).appendText("6,ADAUSDT,LONG,50.0,12.40\n") // Valid kembali
+    println("(Log) File $filePath telah dikontaminasi dengan 2 baris data rusak.")
+    println("--------------------------------------------------")
+
+    println("=== [4] EXECUTING LOAD SYSTEM & DASHBOARD RECAP ===")
+    // Memuat kembali data transaksi (Sistem harus melakukan Safe Skip)
+    val loadedTrades = loadTrades(filePath)
+
+    println("\n=== DASHBOARD STRATEGI SCALPING ===")
+    println("Total Posisi Terproses (Valid) : ${loadedTrades.size}")
+
+    // Rekapitulasi total Margin dan PnL
+    val totalMargin = loadedTrades.sumOf { it.margin }
+    val totalPnL = loadedTrades.sumOf { it.pnl }
+    val winRate = (loadedTrades.count { it.pnl > 0 }.toDouble() / loadedTrades.size) * 100
+
+    println("Total Akumulasi Margin        : $totalMargin USDT")
+    println("Net Profit & Loss (PnL)       : $totalPnL USDT")
+    System.out.printf("Win Rate Strategi             : %.2f%%\n", winRate)
+    println("==================================================")
 }
