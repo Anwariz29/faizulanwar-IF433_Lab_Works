@@ -12,7 +12,7 @@ fun main(fullContent: Any) {
     println("Text berhasil di-append.")
 
     println("=== TEST READ TEXT ===")
-    val lines = file.readText()
+    val line = file.readText()
     println("Membaca sekaligus:\n$fullContent")
 
     println("=== TEST READ LINES ===")
