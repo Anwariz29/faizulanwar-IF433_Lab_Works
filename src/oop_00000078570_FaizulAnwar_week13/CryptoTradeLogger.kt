@@ -1,5 +1,5 @@
 package oop_00000078570_FaizulAnwar_week13
-
+import java.io.File
 data class TradeRecord(
     val id: Int,
     val symbol: String,
@@ -30,6 +30,21 @@ fun fromCsvTrade(line: String): TradeRecord? {
         // Menangkap segala bentuk Exception (NumberFormatException, IndexOutOfBoundsException, dll)
         println("(Log) Data korup diabaikan: $line")
         null
+    }
+}
+
+fun saveTrades(trades: List<TradeRecord>, path: String) {
+    try {
+        // Membuka PrintWriter secara aman. File akan otomatis di-close setelah blok selesai.
+        File(path).printWriter().use { writer ->
+            trades.forEach { trade ->
+                // Menulis hasil dari extension function toCsv() ke dalam file
+                writer.println(trade.toCsv())
+            }
+        }
+        println("(Log) Berhasil menyimpan ${trades.size} data transaksi ke $path")
+    } catch (e: Exception) {
+        println("(Log) Gagal menyimpan data ke file: ${e.message}")
     }
 }
 
