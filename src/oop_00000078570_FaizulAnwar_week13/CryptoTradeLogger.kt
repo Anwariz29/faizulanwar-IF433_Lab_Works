@@ -67,42 +67,49 @@ fun loadTrades(path: String): List<TradeRecord> {
 }
 
 // Contoh fungsi main untuk mensimulasikan penggunaan model data
+
 fun main() {
     val filePath = "crypto_trades.csv"
 
-    println("=== [1] INSIALISASI MOCK DATA ===")
+    // --- (Proses Save dan Injection dari langkah 7 & 8) ---
     val mockTrades = listOf(
         TradeRecord(1, "BTCUSDT", "LONG", 250.0, 45.80),
         TradeRecord(2, "ETHUSDT", "SHORT", 150.0, -12.50)
     )
-
-    // Simpan data awal yang valid
     saveTrades(mockTrades, filePath)
-    println("--------------------------------------------------")
-
-    // ==========================================================
-    // 8. INJECTING MALFORMED DATA (Penyuntikan Data Kotor)
-    // ==========================================================
-    println("=== [2] INJECTING MALFORMED DATA ===")
-
-    // Menyuntikkan baris data yang rusak total (Format ID salah, margin 'XX', pnl 'YY')
     File(filePath).appendText("CORRUPT_ID,DOGEUSDT,Hold,XX,YY\n")
-
-    println("(Log) Baris kotor berhasil disuntikkan ke dalam file $filePath")
     println("--------------------------------------------------")
 
-    println("=== [3] DEMONSTRASI KEANDALAN SISTEM (LOAD SYSTEM) ===")
-    // Membaca kembali file yang kini telah terkontaminasi data rusak
-    val loadedTrades = loadTrades(filePath)
 
-    println("\n=== RINGKASAN DASHBOARD TRADING ===")
-    println("Total transaksi valid yang berhasil dimuat: ${loadedTrades.size}")
+    // ==========================================================
+    // 9. AGGREGATION & CALCULATION
+    // ==========================================================
+    println("=== [4] PROSES AGREGASI & KALKULASI PNL ===")
 
-    // Tampilkan data yang berhasil diselamatkan
-    loadedTrades.forEach { println("Data Selamat -> $it") }
+    // Tarik histori transaksi dan simpan di variabel val loadedData
+    val loadedData: List<TradeRecord> = loadTrades(filePath)
 
-    // Melakukan kalkulasi aman
-    val totalPnL = loadedTrades.sumOf { it.pnl }
-    println("Total Net PnL dari data valid: $totalPnL USDT")
+    // Hitung jumlah PnL bersih menggunakan higher-order function .sumOf
+    val netPnL = loadedData.sumOf { it.pnl }
+
+    // Menghitung total margin untuk insight tambahan
+    val totalMargin = loadedData.sumOf { it.margin }
+
+    // Tampilkan hasil kalkulasi ke dashboard
+    println("\n==================================================")
+    println("         REKAPITULASI HASIL BACKTESTING           ")
+    println("==================================================")
+    println(" Total Posisi Valid Terproses : ${loadedData.size} posisi")
+    println(" Total Margin Terpakai        : $totalMargin USDT")
+    println(" Total PnL Bersih (Net PnL)   : $netPnL USDT")
+
+    // Memberikan indikasi performa strategi berdasarkan hasil PnL bersih
+    if (netPnL > 0) {
+        println(" Status Strategi              : PROFIT (Bullish Perform)")
+    } else if (netPnL < 0) {
+        println(" Status Strategi              : LOSS (Evaluasi Kembali)")
+    } else {
+        println(" Status Strategi              : BREAK EVEN (SUT)")
+    }
     println("==================================================")
 }
