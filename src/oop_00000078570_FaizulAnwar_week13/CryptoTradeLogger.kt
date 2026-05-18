@@ -8,6 +8,10 @@ data class TradeRecord(
     val pnl: Double
 )
 
+fun TradeRecord.toCsv(): String {
+    return "$id,$symbol,$type,$margin,$pnl"
+}
+
 // Contoh fungsi main untuk mensimulasikan penggunaan model data
 fun main() {
     println("=== Inisialisasi Log Transaksi Kripto ===")
