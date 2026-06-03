@@ -1,6 +1,5 @@
 package oop_00000078570_FaizulAnwar_week06
 
-import javax.smartcardio.Card
 
 class Gopay : PaymentMethod {
     override fun pay(amount: Double) {

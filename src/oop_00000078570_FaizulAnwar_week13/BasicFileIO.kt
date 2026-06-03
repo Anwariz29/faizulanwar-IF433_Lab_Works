@@ -2,7 +2,7 @@ package oop_00000078570_FaizulAnwar_week13
 
 import java.io.File
 
-fun main(fullContent: Any) {
+fun main() {
     println(" TEST WRITE TEXT ===")
     val file = File("notes.txt")
     file.writeText("Line 1: Inisialisasi sistem.\n")
@@ -13,7 +13,7 @@ fun main(fullContent: Any) {
 
     println("=== TEST READ TEXT ===")
     val line = file.readText()
-    println("Membaca sekaligus:\n$fullContent")
+    println("Membaca sekaligus:\n$line")
 
     println("=== TEST READ LINES ===")
     val lines = file.readLines()
